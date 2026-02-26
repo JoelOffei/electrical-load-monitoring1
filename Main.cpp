@@ -35,6 +35,12 @@ public:
         }
     }
 
+    void loadFromFile(string n, double p, double h) {
+        name = n;
+        power = p;
+        hours = h;
+    }
+
     double calculateDailyEnergy() const {
         return (power * hours) / 1000.0;
     }
@@ -60,7 +66,6 @@ const int MAX = 50;
 Appliance appliances[MAX];
 int applianceCount = 0;
 
-// Save appliances to file
 void saveToFile() {
     ofstream file("appliances.txt");
     for (int i = 0; i < applianceCount; i++) {
@@ -71,7 +76,24 @@ void saveToFile() {
     file.close();
 }
 
+void loadFromFile() {
+    ifstream file("appliances.txt");
+    string name;
+    double power, hours;
+    char comma;
+
+    while (getline(file, name, ',') &&
+           file >> power >> comma >> hours) {
+
+        appliances[applianceCount].loadFromFile(name, power, hours);
+        applianceCount++;
+    }
+    file.close();
+}
+
 int main() {
+
+    loadFromFile();  // Load saved data at startup
 
     int choice;
 
