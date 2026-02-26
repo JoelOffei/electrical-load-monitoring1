@@ -46,6 +46,8 @@ public:
         cout << "\nAppliance: " << name << endl;
         cout << "Power: " << power << " W" << endl;
         cout << "Daily Usage: " << hours << " hrs" << endl;
+        cout << "Monthly Energy: "
+             << calculateMonthlyEnergy() << " kWh" << endl;
     }
 };
 
