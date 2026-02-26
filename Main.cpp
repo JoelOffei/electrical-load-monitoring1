@@ -12,9 +12,9 @@ private:
 public:
     void setAppliance() {
         cin.ignore();
-
         cout << "Enter appliance name: ";
         getline(cin, name);
+
         while (name.empty()) {
             cout << "Name cannot be empty. Enter again: ";
             getline(cin, name);
@@ -91,9 +91,49 @@ void loadFromFile() {
     file.close();
 }
 
+void searchAppliance() {
+    cin.ignore();
+    string searchName;
+    cout << "Enter appliance name to search: ";
+    getline(cin, searchName);
+
+    bool found = false;
+    for (int i = 0; i < applianceCount; i++) {
+        if (appliances[i].getName() == searchName) {
+            appliances[i].display();
+            found = true;
+        }
+    }
+
+    if (!found)
+        cout << "Appliance not found.\n";
+}
+
+void removeAppliance() {
+    cin.ignore();
+    string removeName;
+    cout << "Enter appliance name to remove: ";
+    getline(cin, removeName);
+
+    for (int i = 0; i < applianceCount; i++) {
+        if (appliances[i].getName() == removeName) {
+
+            for (int j = i; j < applianceCount - 1; j++)
+                appliances[j] = appliances[j + 1];
+
+            applianceCount--;
+            saveToFile();
+            cout << "Appliance removed successfully.\n";
+            return;
+        }
+    }
+
+    cout << "Appliance not found.\n";
+}
+
 int main() {
 
-    loadFromFile();  // Load saved data at startup
+    loadFromFile();
 
     int choice;
 
@@ -101,6 +141,8 @@ int main() {
         cout << "\n=== Electrical Load Monitoring System ===\n";
         cout << "1. Register Appliance\n";
         cout << "2. View All Appliances\n";
+        cout << "3. Search Appliance\n";
+        cout << "4. Remove Appliance\n";
         cout << "0. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -124,6 +166,14 @@ int main() {
             else
                 for (int i = 0; i < applianceCount; i++)
                     appliances[i].display();
+            break;
+
+        case 3:
+            searchAppliance();
+            break;
+
+        case 4:
+            removeAppliance();
             break;
 
         case 0:
