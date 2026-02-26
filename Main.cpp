@@ -10,14 +10,36 @@ private:
 
 public:
     void setAppliance() {
+        cin.ignore();
+
         cout << "Enter appliance name: ";
-        cin >> name;
+        getline(cin, name);
+        while (name.empty()) {
+            cout << "Name cannot be empty. Enter again: ";
+            getline(cin, name);
+        }
 
         cout << "Enter power rating (Watts): ";
         cin >> power;
+        while (power <= 0) {
+            cout << "Power must be greater than 0: ";
+            cin >> power;
+        }
 
-        cout << "Enter daily usage hours: ";
+        cout << "Enter daily usage hours (0-24): ";
         cin >> hours;
+        while (hours < 0 || hours > 24) {
+            cout << "Invalid hours. Enter between 0 and 24: ";
+            cin >> hours;
+        }
+    }
+
+    double calculateDailyEnergy() const {
+        return (power * hours) / 1000.0;
+    }
+
+    double calculateMonthlyEnergy() const {
+        return calculateDailyEnergy() * 30;
     }
 
     void display() const {
