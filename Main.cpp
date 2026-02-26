@@ -35,12 +35,6 @@ public:
         }
     }
 
-    void loadFromFile(string n, double p, double h) {
-        name = n;
-        power = p;
-        hours = h;
-    }
-
     double calculateDailyEnergy() const {
         return (power * hours) / 1000.0;
     }
@@ -60,6 +54,12 @@ public:
     string getName() const { return name; }
     double getPower() const { return power; }
     double getHours() const { return hours; }
+
+    void loadFromFile(string n, double p, double h) {
+        name = n;
+        power = p;
+        hours = h;
+    }
 };
 
 const int MAX = 50;
@@ -122,14 +122,12 @@ void removeAppliance() {
 
     for (int i = 0; i < applianceCount; i++) {
         if (appliances[i].getName() == removeName) {
-
             for (int j = i; j < applianceCount - 1; j++) {
                 appliances[j] = appliances[j + 1];
             }
-
             applianceCount--;
-            saveToFile();
             cout << "Appliance removed successfully.\n";
+            saveToFile();
             return;
         }
     }
@@ -139,7 +137,6 @@ void removeAppliance() {
 
 // Billing summary
 void billingSummary() {
-
     if (applianceCount == 0) {
         cout << "No appliances registered.\n";
         return;
@@ -147,14 +144,12 @@ void billingSummary() {
 
     cout << "Enter tariff per kWh: ";
     cin >> tariff;
-
     while (tariff <= 0) {
         cout << "Tariff must be positive: ";
         cin >> tariff;
     }
 
     double totalEnergy = 0;
-
     for (int i = 0; i < applianceCount; i++) {
         totalEnergy += appliances[i].calculateMonthlyEnergy();
     }
