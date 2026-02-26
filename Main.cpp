@@ -65,7 +65,9 @@ public:
 const int MAX = 50;
 Appliance appliances[MAX];
 int applianceCount = 0;
+double tariff = 0.0;
 
+// Save appliances to file
 void saveToFile() {
     ofstream file("appliances.txt");
     for (int i = 0; i < applianceCount; i++) {
@@ -76,6 +78,7 @@ void saveToFile() {
     file.close();
 }
 
+// Load appliances from file
 void loadFromFile() {
     ifstream file("appliances.txt");
     string name;
@@ -91,6 +94,7 @@ void loadFromFile() {
     file.close();
 }
 
+// Search appliance
 void searchAppliance() {
     cin.ignore();
     string searchName;
@@ -109,6 +113,7 @@ void searchAppliance() {
         cout << "Appliance not found.\n";
 }
 
+// Remove appliance
 void removeAppliance() {
     cin.ignore();
     string removeName;
@@ -118,8 +123,9 @@ void removeAppliance() {
     for (int i = 0; i < applianceCount; i++) {
         if (appliances[i].getName() == removeName) {
 
-            for (int j = i; j < applianceCount - 1; j++)
+            for (int j = i; j < applianceCount - 1; j++) {
                 appliances[j] = appliances[j + 1];
+            }
 
             applianceCount--;
             saveToFile();
@@ -129,6 +135,46 @@ void removeAppliance() {
     }
 
     cout << "Appliance not found.\n";
+}
+
+// Billing summary
+void billingSummary() {
+
+    if (applianceCount == 0) {
+        cout << "No appliances registered.\n";
+        return;
+    }
+
+    cout << "Enter tariff per kWh: ";
+    cin >> tariff;
+
+    while (tariff <= 0) {
+        cout << "Tariff must be positive: ";
+        cin >> tariff;
+    }
+
+    double totalEnergy = 0;
+
+    for (int i = 0; i < applianceCount; i++) {
+        totalEnergy += appliances[i].calculateMonthlyEnergy();
+    }
+
+    double totalCost = totalEnergy * tariff;
+
+    cout << "\n===== BILLING SUMMARY =====\n";
+    cout << "Total Monthly Energy: "
+         << totalEnergy << " kWh\n";
+    cout << "Tariff: " << tariff << endl;
+    cout << "Total Monthly Cost: "
+         << totalCost << endl;
+
+    ofstream bill("billing_summary.txt");
+    bill << "Total Monthly Energy: "
+         << totalEnergy << " kWh\n";
+    bill << "Tariff: " << tariff << endl;
+    bill << "Total Monthly Cost: "
+         << totalCost << endl;
+    bill.close();
 }
 
 int main() {
@@ -143,6 +189,7 @@ int main() {
         cout << "2. View All Appliances\n";
         cout << "3. Search Appliance\n";
         cout << "4. Remove Appliance\n";
+        cout << "5. Billing Summary\n";
         cout << "0. Exit\n";
         cout << "Enter choice: ";
         cin >> choice;
@@ -174,6 +221,10 @@ int main() {
 
         case 4:
             removeAppliance();
+            break;
+
+        case 5:
+            billingSummary();
             break;
 
         case 0:
