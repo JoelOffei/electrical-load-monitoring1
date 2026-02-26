@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -49,11 +50,26 @@ public:
         cout << "Monthly Energy: "
              << calculateMonthlyEnergy() << " kWh" << endl;
     }
+
+    string getName() const { return name; }
+    double getPower() const { return power; }
+    double getHours() const { return hours; }
 };
 
 const int MAX = 50;
 Appliance appliances[MAX];
 int applianceCount = 0;
+
+// Save appliances to file
+void saveToFile() {
+    ofstream file("appliances.txt");
+    for (int i = 0; i < applianceCount; i++) {
+        file << appliances[i].getName() << ","
+             << appliances[i].getPower() << ","
+             << appliances[i].getHours() << endl;
+    }
+    file.close();
+}
 
 int main() {
 
@@ -73,6 +89,7 @@ int main() {
             if (applianceCount < MAX) {
                 appliances[applianceCount].setAppliance();
                 applianceCount++;
+                saveToFile();
                 cout << "Appliance added successfully.\n";
             } else {
                 cout << "Storage full.\n";
